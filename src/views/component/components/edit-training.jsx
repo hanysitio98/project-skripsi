@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Card } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../layout";
 
-import ProjectService from "services/ProjectService.service";
-import UserService from "services/UserService.service";
-import TrainingService from "services/TrainingService.service";
 import { FileUpload } from "primereact/fileupload";
 import DatePicker from "react-datepicker";
+import TrainingService from "services/TrainingService.service";
 
 export const APP_BASE_URL = "http://localhost:8080";
 

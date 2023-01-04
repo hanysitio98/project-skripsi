@@ -1,13 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
-import { Header } from '../layout';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { FiDownload } from "react-icons/fi";
-import {
-  CgMathPlus,
-  CgPen,
-  CgTrash,
-  CgPushDown
-} from "react-icons/cg";
+import { Header } from '../layout';
 
 const Billing = () => {
 

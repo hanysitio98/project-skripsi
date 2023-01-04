@@ -7,15 +7,15 @@ import {
   Navbar,
   Row,
   Tab,
-  Tabs,
+  Tabs
 } from "react-bootstrap";
 
-import { GoCalendar, GoTag, GoClock } from "react-icons/go";
+import { GoCalendar, GoClock, GoTag } from "react-icons/go";
 
 import { format } from "date-fns";
+import { logo2x, trainingimage1, trainingimage3 } from "images";
 import { TiLocation } from "react-icons/ti";
 import { TrainingService } from "services";
-import { trainingimage1, trainingimage3, logo2x } from "images";
 
 export const APP_BASE_URL = "http://localhost:8080";
 

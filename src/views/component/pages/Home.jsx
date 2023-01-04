@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Col, Row, Card, CardDeck } from "react-bootstrap";
-import { Header } from "../layout";
+import { useEffect, useState } from "react";
+import { Card, CardDeck, Col, Row } from "react-bootstrap";
 import { CgCopy, CgUserList } from "react-icons/cg";
+import { Header } from "../layout";
 
-import { FcDataSheet, FcSelfie, FcFaq } from "react-icons/fc";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FcDataSheet, FcFaq, FcSelfie } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 import {
-  TrainerService,
-  ProjectService,
-  TrainingService,
-  FreelancerService,
-  RegistrationService,
+  FreelancerService, ProjectService, RegistrationService, TrainerService, TrainingService
 } from "services";
 
 const Home = () => {

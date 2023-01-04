@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Col, Form, Row } from 'react-bootstrap';
-import { Navigate, useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import UserService from 'services/UserService.service';
 import { Header } from '../layout';
 

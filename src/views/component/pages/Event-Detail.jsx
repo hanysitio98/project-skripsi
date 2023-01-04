@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Col, Container, Navbar, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-import { GoCalendar, GoTag, GoClock } from "react-icons/go";
+import { GoCalendar, GoClock, GoTag } from "react-icons/go";
 
 import { logo2x } from "images";
 import { TiLocation } from "react-icons/ti";

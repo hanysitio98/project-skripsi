@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, Card } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Header } from '../layout'
 import { FileUpload } from 'primereact/fileupload';
+import { useEffect, useState } from 'react';
+import { Card, Col, Form, Row } from 'react-bootstrap';
 import {
   CgPushDown
 } from "react-icons/cg";
+import { useNavigate, useParams } from 'react-router-dom';
 import TrainerService from 'services/TrainerService.service';
+import { Header } from '../layout';
 export const APP_BASE_URL = "http://localhost:8080";
 
 const EditTrainer = () => {

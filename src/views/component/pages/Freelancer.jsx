@@ -4,19 +4,17 @@ import {
   ButtonGroup,
   Col,
   Dropdown,
-  Row,
-  Table,
+  Row
 } from "react-bootstrap";
 import { CgPen, CgPushDown, CgTrash } from "react-icons/cg";
 import { Header } from "../layout";
 
+import JsPDF from "jspdf";
+import { CSVLink } from "react-csv";
 import { Link } from "react-router-dom";
 import { FreelancerService } from "services";
 import { AddFreelancer } from "../components";
 import { AddModal } from "../components/modal";
-import JsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import { CSVLink } from "react-csv";
 
 export const APP_BASE_URL = "http://localhost:8080";
 

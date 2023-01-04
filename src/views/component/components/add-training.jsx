@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, Form, Toast } from "react-bootstrap";
 import { FileUpload } from "primereact/fileupload";
-import TrainingService from "services/TrainingService.service";
+import { useEffect, useState } from "react";
+import { Col, Form, Row, Toast } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { NumericFormat } from "react-number-format";
+import TrainingService from "services/TrainingService.service";
 
 export const APP_BASE_URL = "http://localhost:8080";
 

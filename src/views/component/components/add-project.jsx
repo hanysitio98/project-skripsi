@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, Toast } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Col, Form, Row, Toast } from 'react-bootstrap';
 import ProjectService from 'services/ProjectService.service';
 import UserService from 'services/UserService.service';
 
