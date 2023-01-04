@@ -1,0 +1,10 @@
+---
+applications:
+- name: Payment_Registration_Web
+  memory: 64M
+  disk_quota: 64M
+  instances: 1
+  path: build
+  buildpack: staticfile_buildpack
+  routes:
+  - route: https://api.devapps.ocp.dti.co.id

@@ -1,0 +1,445 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Row, Col, Table, Card, Form } from 'react-bootstrap';
+import { Header } from '../layout';
+import {
+  CgMathPlus,
+  CgPen,
+  CgTrash,
+  CgPushDown
+} from "react-icons/cg";
+import FreelancerService from 'services/FreelancerService.service';
+import { AddModal } from '../components/modal';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { AddFreelancer } from '../components';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
+import { FileUpload } from 'primereact/fileupload';
+import { Toolbar } from 'primereact/toolbar';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
+
+// type FreelancerProps = {
+//   items: {
+//     freelancerId: string,
+//     freelancerName: string,
+//     freelancerImage: string,
+//     idCard: string,
+//     cv: string
+//   }[]
+// }
+
+
+export const APP_BASE_URL = "http://localhost:8080";
+
+
+const Freelancer = () => {
+
+  const emptyFreelancer = {
+    id: null,
+    freelancer_name: '',
+    id_card: '',
+    freelancer_image: null,
+    cv: null
+  }
+
+  const [freelancers, setFreelancers] = useState([]);
+  const [freelancer, setFreelancer] = useState(emptyFreelancer);
+  const [modalContent, setModalContent] = useState();
+  const [globalFilter, setGlobalFilter] = useState(null);
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const [filters, setFilters] = useState(null);
+  const [freelancerImage, setFreelancerImage] = useState();
+  const [selectedFreelancers, setSelectedFreelancers] = useState(null);
+  const [newFreelancerDialog, setNewFreelancerDiaglog] = useState(false);
+  const [deleteFreelancerDialog, setDeleteFreelancerDialog] = useState(false);
+  const [deleteFreelancersDialog, setDeleteFreelancersDialog] = useState(false);
+  const [cv, setCv] = useState();
+  const { freelancerId } = useParams();
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+  const toast = useRef(null);
+
+
+
+  const [filters1, setFilters1] = useState({
+    'freelancer_number': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'freelancer_name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    'id_card': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+  })
+
+  const filtersMap = {
+    'filters1': { value: filters1, callback: setFilters1 }
+
+  };
+
+
+
+  const openNew = () => {
+    setFreelancers(emptyFreelancer);
+    setNewFreelancerDiaglog(true);
+  }
+
+  const hideDialog = () => {
+    setNewFreelancerDiaglog(false);
+  }
+
+  const hideDeleteFreelancerDialog = () => {
+    setDeleteFreelancerDialog(false);
+  }
+
+  const hideDeleteFreelancersDialog = () => {
+    setDeleteFreelancersDialog(false);
+  }
+
+  const deleteFreelancer = (id) => {
+    FreelancerService.deleteFreelancer(id).then((response) => {
+      getAllFreelancer();
+    }).catch(error => {
+      console.log(error);
+    })
+    console.log(freelancerId);
+
+  }
+
+  // const deleteFreelancer = async (id) => {
+
+  //   // let _freelancers = freelancers.filter(val => val.id !== freelancer.id);
+  //   // setFreelancers(_freelancers);
+  //   // setDeleteFreelancerDialog(false);
+  //   // setFreelancers(emptyFreelancer);
+  //   try {
+  //     const response = FreelancerService.deleteFreelancer(id);
+  //     toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Freelancer Deleted', life: 3000 })
+  //   } catch {
+
+  //   }
+  // }
+
+
+  const confirmDeleteFreelancer = (freelancers) => {
+    setFreelancers(freelancers);
+    setDeleteFreelancerDialog(true);
+  }
+
+  const deleteFreelancerDialogFooter = (
+    <React.Fragment>
+      <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteFreelancerDialog} />
+      <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteFreelancer} />
+    </React.Fragment>
+  )
+
+
+  const deleteSelectedFreelancers = () => {
+    let _freelancer = freelancers.filter(val => !selectedFreelancers.includes(val));
+    setFreelancers(_freelancer);
+    setDeleteFreelancersDialog(false);
+    setSelectedFreelancers(null);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Freelancers Deleted', life: 3000 });
+  }
+
+
+
+  const onGlobalFilterChange = (event, filtersKey) => {
+    const value = event.target.value;
+    let filters = { ...filtersMap[filtersKey].value };
+    filters['global'].value = value;
+
+    filtersMap[filtersKey].callback(filters);
+  }
+
+
+  useEffect(() => {
+    console.log("useEffect nih")
+    getAllFreelancer();
+
+  }, []);
+
+  const getAllFreelancer = async () => {
+    try {
+      const response = await FreelancerService.getAllFreelancer();
+      const _freelancers = response.data;
+      setFreelancers(response.data);
+      if (_freelancers.freelancer_image) {
+        fetchImage(_freelancers.freelancer_image);
+      }
+
+      if (_freelancers.cv) {
+        fetchFile(_freelancers.cv);
+      }
+      console.log(response.data);
+      console.log(freelancers);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const fetchImage = async (image) => {
+    const res = await fetch(`${APP_BASE_URL}/api/images/${image}`);
+    const fileBlob = await res.blob();
+    const fileObjectURL = URL.createObjectURL(fileBlob);
+    setFreelancerImage(fileObjectURL);
+  }
+
+  const fetchFile = async (file) => {
+    const res = await fetch(`${APP_BASE_URL}/api/images/${file}`);
+    const fileBlob = await res.blob();
+    const fileObjectURL = URL.createObjectURL(fileBlob);
+    setCv(fileObjectURL);
+  }
+
+  const imageBodyTemplate = (rowData) => {
+    return <img src={freelancerImage} alt={rowData.image} className="product-image" />;
+  }
+
+  const actionBodyTemplate = (rowData) => {
+    return <div className='d-inline-flex'>
+      <Link className='btn btn-outline-info' to={`/edit-freelancer/${rowData}`}>
+        <CgPen />
+      </Link>
+      <button className='btn btn-outline-danger' onClick={() => confirmDeleteFreelancer(rowData)}
+        style={{ marginLeft: "10px" }}>
+        <CgTrash />
+      </button>
+    </div>
+  }
+
+  // const fileBodyTemplate = (rowData) => {
+  //   return <img src={cv} alt={rowData.image} className="product-image" />;
+  // }
+
+  const dismissModalContent = () => setModalContent();
+
+  const leftToolbarTemplate = () => {
+    return (
+      <React.Fragment>
+        <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={addFreelancer} />
+        <Button label="Delete" icon="pi pi-trash" className="p-button-danger" />
+      </React.Fragment>
+    )
+  }
+
+  const rightToolbarTemplate = () => {
+    return (
+      <React.Fragment>
+        <Button label="Export" icon="pi pi-upload" className="p-button-help" />
+      </React.Fragment>
+    )
+  }
+
+  // const renderHeader = (filtersKey) => {
+  //   const filters = filtersMap[`${filtersKey}`].value;
+  //   const value = filters['global'] ? filters['global'].value : '';
+
+  //   return (
+  //     <span className="p-input-icon-left">
+  //       <i className="pi pi-search" />
+  //       <InputText type="search"  onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="Global Search" />
+  //     </span>
+  //   );
+  // }
+
+  // const header = renderHeader('filters1');
+
+  // const onGlobalFilterChange = (e) => {
+  //   const value = e.target.value;
+  //   let _filters1 = { ...filters };
+  //   _filters1['global'].value = value;
+
+  //   setFilters(_filters1);
+  //   setGlobalFilterValue(value);
+  // }
+
+  const header = (
+    <div className="table-header">
+      <h5 className="mx-0 my-1">Manage Freelancers</h5>
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+      </span>
+    </div>
+  );
+
+
+  const saveorUpdateFreelancer = (e) => {
+    e.preventDefault();
+
+    // const freelancer = { freelancerName, idCard, freelancerNumber, cv, freelancerImage };
+
+    // if (freelancerId) {
+    //   FreelancerService.updateFreelancer(freelancerId, freelancer).then((response) => {
+    //     navigate("/freelancer");
+    //   }).catch(error => {
+    //     console.log(error)
+    //   })
+    // } else {
+    //   FreelancerService.createFreelancer(freelancer).then((response) => {
+
+    //     console.log(response.data);
+    //     navigate("/freelancer")
+    //   }).catch(error => {
+    //     console.log(error)
+    //   })
+    // }
+
+    // alert("ok")
+
+    // var formData = new FormData();
+    // formData.append("freelancerImage", freelancerImage);
+    // formData.append("cv", cv);
+    // formData.append("freelancerName", freelancerName);
+    // formData.append("freelancerNumber", freelancerNumber);
+    // formData.append("idCard", idCard);
+
+    // FreelancerService.createFreelancer(formData).then((response) => {
+    //   console.log(response);
+    //   console.log(formData);
+    // })
+
+
+  }
+
+  const handleAddModal = (content, onSubmit, onClose) => {
+    setModalContent({
+      children: content,
+      onHide: dismissModalContent,
+      onSubmit: onSubmit,
+      onClose: dismissModalContent
+
+    })
+  }
+
+  const addFreelancer = () => {
+    handleAddModal(<AddFreelancer />)
+  }
+
+
+
+
+  const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-text" />;
+  const paginatorRight = <Button type="button" icon="pi pi-cloud" className="p-button-text" />;
+
+  return (
+    <Header>
+      <AddModal
+        show={Boolean(modalContent)}
+        {...modalContent} />
+
+      <h1 className="font-weight-bolder mb-5">Freelancer</h1>
+      {/* <div className="d-flex justify-content-end">
+        <Row >
+          <Col className='col-auto'>
+            <button onClick={addFreelancer} className="btn btn-outline-primary btn-block">
+              <span>
+                <CgMathPlus className='mr-1' />
+                Add
+              </span>
+            </button>
+          </Col>
+          <Col className='col-auto'>
+            <Link to="/add-trainer" className="btn btn-outline-primary btn-block">
+              <span>
+                <CgPushDown className='mr-1' />
+                Export
+              </span>
+            </Link>
+          </Col>
+        </Row>
+      </div> */}
+
+      <Toast ref={toast} />
+
+      {/* <div className="card">
+        <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+
+        <DataTable value={freelancers} election={selectedFreelancers} onSelectionChange={(e) => setSelectedFreelancers(e.value)}
+          dataKey="id" paginator responsiveLayout="scroll" showGridlines header={header} globalFilter={globalFilter} paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[10, 20, 50]} paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
+          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} exportable={false}></Column>
+          <Column field="freelancerNumber" header="Freelancer Number" sortable></Column>
+          <Column field="freelancerName" header="Nama" sortable></Column>
+          <Column field="idCard" header="Id Card" sortable></Column>
+          <Column header="Image" body={imageBodyTemplate}></Column>
+          <Column field="cv" header="CV" ></Column>
+          <Column header="Action" body={actionBodyTemplate}></Column>
+
+        </DataTable>
+      </div> */}
+
+      <Dialog visible={deleteFreelancerDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteFreelancerDialogFooter} onHide={hideDeleteFreelancerDialog}>
+        <div className="confirmation-content">
+          <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+          {freelancer && <span>Are you sure you want to delete <b>{freelancer.name}</b>?</span>}
+        </div>
+      </Dialog>
+
+      <div className="card shadow mt-4">
+        <div className="card-header py-3">
+          <h6 className="m-0 font-weight-bold text-primary">Freelancer</h6>
+        </div>
+        <div className="card-body">
+          <div className="table-responsive">
+            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0" >
+              <thead>
+                <tr>
+                  <th>Nama Freelancer</th>
+                  <th>KTP</th>
+                  <th>Pas Poto</th>
+                  <th>CV</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Nama Freelancer</th>
+                  <th>KTP</th>
+                  <th>Pas Poto</th>
+                  <th>CV</th>
+                  <th>Actions</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                {freelancers.map(freelancer =>
+                  <tr key={freelancer.id}>
+                    <td>{freelancer.freelancerName}</td>
+                    <td>{freelancer.idCard}</td>
+                    <td>
+                      <div className='d-inline-flex'>
+                        <CgPushDown />
+                        {freelancer.freelancerImage}
+                      </div>
+                    </td>
+                    <td>
+                      <div className='d-inline-flex'>
+                        <CgPushDown />
+                        {freelancer.cv}
+                      </div>
+                    </td>
+                    <td>
+                      <div className='d-inline-flex'>
+                        <Link className='btn btn-outline-info' to={`/edit-freelancer/${freelancer.id}`}>
+                          <CgPen />
+                        </Link>
+                        <button className='btn btn-outline-danger' onClick={() => deleteFreelancer(freelancer.id)}
+                          style={{ marginLeft: "10px" }}>
+                          <CgTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </Header >
+  )
+}
+
+export default Freelancer;

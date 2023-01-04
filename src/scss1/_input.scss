@@ -1,0 +1,106 @@
+$border-width: 0 0 1px 0;
+
+.form-group {
+    .col-form-label {
+        // color: $gray-600;
+        color: $primary;
+        // font-size: smaller;
+        font-weight: $font-weight-semibold;
+        cursor: default;
+        padding-bottom: 0;
+
+        &.is-optional {
+            &::after {
+                content: "(Opsional)";
+            }
+        }
+    }
+
+    input,
+    select {
+        &.form-control {
+            // padding-left: 0;
+            // padding-right: 0;
+            border: 1px solid silver;
+            box-shadow: none;
+            position: relative;
+            border-width: $border-width;
+            // border-radius: 0;
+
+            &.is-invalid {
+                background: none;
+                padding-right: 0;
+            }
+
+            &.ng-invalid {
+                box-shadow: none;
+            }
+        }
+
+        &:read-only {
+            background: transparent;
+        }
+
+        // currently, used by password toggle only
+        ~svg-icon {
+            text-align: center;
+            position: absolute;
+            top: 0;
+            right: 15px; // gutter size
+            cursor: pointer;
+            padding: $input-padding-y 0;
+        }
+
+        ~fa-icon {
+            text-align: center;
+            position: absolute;
+            top: 0;
+            right: 15px; // gutter size
+            // line-height: 2.5em;
+            // width: 1.5em; // enlarge the hitbox
+            cursor: pointer;
+            padding: $input-padding-y 0;
+        }
+    }
+
+    select {
+        &.form-control {
+            @include appearance(none);
+            background: url(data:image/webp;base64,UklGRgwBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSEoAAAABL0AQQBosiCnWmeKICOJeMIgkyclsYeCTACSAhLQOzr8WcnAQ0f/kf+UYGSy2FF2KxjZZTFaKxpaiTRb75GgcKSzOuXHpxR8AAFZQOCCcAAAAMAQAnQEqEAAQAAFAJiWwAnRHAGoAegB0gH6qkz68QT2D9MzjVtZQjQAAAP7/OgoT7ScWqiHLvfBf70Ee83xprWitIrB89QaO/GIagH+rK1JIYcIzBEDApYhRe9ejoMpdXad/i0xqNTfYJ6i6vpdXtoFwHst1ZeQqG/10YkCp5KKqss29nK+xnfD1gtLYRg/buvM7OluIA+qcAAAA),
+                url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKxJREFUOBFjYBgF8BDgiludxZO4ShQugIMBUgNSC5NmAjFAAv///5/67y/jfnyGgORAakBqYYaADWBi/r+akZHxKlBCG5chSJq1QWpBekCWM4IIEMCiwPHL/LDXhOTgBuBSCBKHOhtmM9xgkByKASABdJeAxEBegzobRTNIDsMAkCCyIWBFED9jaAbLgQhsgCdjndi/b3/3geSAAYZVMzZ9KGIgQ0CuQREcfhwAdnN92FiQqO0AAAAASUVORK5CYII=);
+            background-repeat: no-repeat;
+            background-position: right;
+            background-size: 1em;
+            padding-right: 1.25em;
+        }
+    }
+
+    &.invalid {
+
+        .form-control,
+        .input-group-text {
+            border-color: $danger;
+        }
+    }
+}
+
+label {
+    &.custom-control {
+        margin-bottom: 0;
+    }
+}
+
+.input-group-text {
+    border-width: $border-width;
+
+    font-weight: $font-weight-bold;
+    padding-right: 1rem;
+}
+
+// @media only screen and (min-width: map-get($grid-breakpoints, "md")) {
+//     .form-group {
+//         .col-form-label {
+//             font-size: .9rem;
+//         }
+//     }
+// }

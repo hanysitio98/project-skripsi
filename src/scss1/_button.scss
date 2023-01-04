@@ -1,0 +1,43 @@
+.btn {
+  // display: inline-flex;
+  // justify-content: center;
+
+  &.disabled,
+  &:disabled {
+    filter: grayscale(0.9);
+  }
+}
+
+@each $color,
+$value in $theme-colors {
+  $themeColor: map_get($theme-colors, $color);
+
+  .btn-outline-#{$color} {
+
+    &:not(:disabled),
+    &:not(.disabled) {
+
+      &:hover,
+      &.hover {
+        color: $themeColor;
+        background-color: rgba($color: $themeColor, $alpha: 0.05);
+      }
+
+      &:active,
+      &.active {
+        color: $themeColor  !important;
+        background-color: rgba($color: $themeColor, $alpha: 0.125) !important;
+      }
+    }
+
+    &.disabled,
+    &:disabled {
+      background-color: transparent;
+
+      &:hover,
+      &.hover {
+        background-color: transparent;
+      }
+    }
+  }
+}

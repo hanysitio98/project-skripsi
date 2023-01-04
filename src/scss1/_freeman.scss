@@ -1,0 +1,18 @@
+.flex-centered {
+  @include flex-centered;
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+.modal-footer {
+  padding-top: 0;
+  border-top: none;
+}
+
+.responsive-item-card {
+  &::before {
+    padding-top: 63%;
+  }
+}

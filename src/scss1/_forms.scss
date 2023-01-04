@@ -1,0 +1,30 @@
+.form-group {
+  label {
+    color: $primary;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.password-toggler {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  background: transparent;
+  color: $primary;
+  cursor: pointer;
+  padding: $input-padding-y $input-padding-x;
+  height: 100%;
+}
+
+select {
+  &.form-control {
+    @include appearance(none);
+    background: url(data:image/webp;base64,UklGRgwBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSEoAAAABL0AQQBosiCnWmeKICOJeMIgkyclsYeCTACSAhLQOzr8WcnAQ0f/kf+UYGSy2FF2KxjZZTFaKxpaiTRb75GgcKSzOuXHpxR8AAFZQOCCcAAAAMAQAnQEqEAAQAAFAJiWwAnRHAGoAegB0gH6qkz68QT2D9MzjVtZQjQAAAP7/OgoT7ScWqiHLvfBf70Ee83xprWitIrB89QaO/GIagH+rK1JIYcIzBEDApYhRe9ejoMpdXad/i0xqNTfYJ6i6vpdXtoFwHst1ZeQqG/10YkCp5KKqss29nK+xnfD1gtLYRg/buvM7OluIA+qcAAAA),
+      url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKxJREFUOBFjYBgF8BDgiludxZO4ShQugIMBUgNSC5NmAjFAAv///5/67y/jfnyGgORAakBqYYaADWBi/r+akZHxKlBCG5chSJq1QWpBekCWM4IIEMCiwPHL/LDXhOTgBuBSCBKHOhtmM9xgkByKASABdJeAxEBegzobRTNIDsMAkCCyIWBFED9jaAbLgQhsgCdjndi/b3/3geSAAYZVMzZ9KGIgQ0CuQREcfhwAdnN92FiQqO0AAAAASUVORK5CYII=);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 1em) center;
+    background-size: 1em;
+    padding-right: 3em;
+  }
+}
