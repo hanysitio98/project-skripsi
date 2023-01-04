@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const signin = async (username, password) => {
     try {
       const response = await fetch(`${APP_BASE_URL}/auth/signin`, {
+        mode: "no-cors",
         method: "POST",
         body: JSON.stringify({
           username,
