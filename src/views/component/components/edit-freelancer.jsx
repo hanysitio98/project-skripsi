@@ -7,7 +7,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import FreelancerService from 'services/FreelancerService.service';
 import { Header } from '../layout';
-export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
 
 const EditFreelancer = () => {
 

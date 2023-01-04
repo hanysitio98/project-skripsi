@@ -4,7 +4,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import TrainerService from "services/TrainerService.service";
 
-export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
 
 const AddTrainer = () => {
   const [trainerName, setTrainerName] = useState("");

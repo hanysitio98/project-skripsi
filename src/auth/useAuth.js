@@ -3,7 +3,7 @@ import { Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { loginimage } from 'images';
-export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
 
 const AuthContext = createContext();
 

@@ -13,7 +13,7 @@ import {
 
 const Home = () => {
   const [linkCatalog, setLinkCatalog] = useState(
-    "http://localhost:3001/catalog"
+    "https://zingy-frangipane-52426a.netlify.app/catalog"
   );
   const [copied, setCopied] = useState(false);
   const [projects, setProjects] = useState([]);
