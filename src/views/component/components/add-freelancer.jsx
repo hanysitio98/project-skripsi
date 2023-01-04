@@ -5,7 +5,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { NumericFormat } from 'react-number-format';
 import { FreelancerService } from 'services';
 
-export const APP_BASE_URL = "http://localhost:8080";
+export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
 
 const AddFreelancer = () => {
 

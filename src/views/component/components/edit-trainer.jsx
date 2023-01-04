@@ -7,7 +7,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import TrainerService from 'services/TrainerService.service';
 import { Header } from '../layout';
-export const APP_BASE_URL = "http://localhost:8080";
+export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
 
 const EditTrainer = () => {
 

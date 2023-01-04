@@ -9,7 +9,7 @@ import { AddTrainer } from "../components";
 import { AddModal } from "../components/modal";
 import { Header } from "../layout";
 
-export const APP_BASE_URL = "http://localhost:8080";
+export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);

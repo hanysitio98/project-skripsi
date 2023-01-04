@@ -8,7 +8,7 @@ import { logo2x } from "images";
 import { TiLocation } from "react-icons/ti";
 import { TrainingService } from "services";
 
-export const APP_BASE_URL = "http://localhost:8080";
+export const APP_BASE_URL = "https://63b532db63d0962b5f37a13b--zingy-frangipane-52426a.netlify.app";
 
 const EventDetail = () => {
   const [trainings, setTrainings] = useState({});
