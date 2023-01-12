@@ -128,9 +128,6 @@ Signed in as: <a href="#login">Mark Otto</a>
                     <small className="font-italic">
                       * mohon simpan informasi pesanan anda, terima kasih!
                     </small>
-                    <small className="font-italic">
-                      * mohon simpan informasi pesanan anda, terima kasih!
-                    </small>
                   </Form>
 
                   {/* <Button
