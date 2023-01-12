@@ -130,12 +130,12 @@ Signed in as: <a href="#login">Mark Otto</a>
                     </small>
                   </Form>
 
-                  <Button
+                  {/* <Button
                     className="btn btn-outline-info"
                     onClick={sendToEmail}
                   >
                     Kirim ke email
-                  </Button>
+                  </Button> */}
                   {/* <div>Nama Peserta : {registration.traineeName}</div>
                   <div>Nama Pelatihan : {registration.training}</div>
                   <div>
