@@ -59,7 +59,8 @@
     "build:production": "env-cmd -f ./.env.production react-scripts build && cp -p Staticfile build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "git:add": "git add ."
   },
   "config": {
     "commitizen": {
