@@ -12,7 +12,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { RegistrationService, TrainingService } from "services";
-import { logo2x } from "images";
+import { logo2x, gopay } from "images";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
@@ -597,6 +597,39 @@ Signed in as: <a href="#login">Mark Otto</a>
                               Metode Pembayaran harus dipilih
                             </small>
                           )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                          <Form.Label>Metode Pembayaran</Form.Label>
+                          <div className="form-check">
+                            <label>
+                              <img src={gopay} alt="gopay" />
+                              Gopay
+                            </label>
+                            <input
+                              className="form-check-input"
+                              type="radio"
+                              {...register("paymentMethod", {
+                                required: true,
+                              })}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                            ></input>
+                          </div>
+
+                          <div className="form-check">
+                            <label>
+                              <img src={gopay} alt="gopay" />
+                              OVO
+                            </label>
+                            <input
+                              className="form-check-input"
+                              type="radio"
+                              {...register("paymentMethod", {
+                                required: true,
+                              })}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                            ></input>
+                          </div>
                         </Form.Group>
 
                         <Row className="justify-content-center">
