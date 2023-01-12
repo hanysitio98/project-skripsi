@@ -1,25 +1,29 @@
-import { useEffect, useState } from 'react';
-import { Col, Form, Row, Toast } from 'react-bootstrap';
-import ProjectService from 'services/ProjectService.service';
-import UserService from 'services/UserService.service';
+import { useEffect, useState } from "react";
+import { Col, Form, Row, Toast, Modal, Button } from "react-bootstrap";
+import { EmployeeService } from "services";
+import ProjectService from "services/ProjectService.service";
+import UserService from "services/UserService.service";
 
 const AddProject = () => {
-
-
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
   const [client, setClient] = useState();
   const [status, setStatus] = useState();
-  const [priority, setPriority] = useState('');
-  const [assignTo, setAssignTo] = useState();
+  const [priority, setPriority] = useState("");
+  const [assignToName, setAssignTo] = useState();
   const [show, setShow] = useState(false);
-  const [users, setUsers] = useState([]);
-
-
+  const [employee, setEmployee] = useState([]);
 
   const saveProject = async (e) => {
     e.preventDefault();
-    const project = { taskTitle, taskDescription, client, status, priority, assignTo };
+    const project = {
+      taskTitle,
+      taskDescription,
+      client,
+      status,
+      priority,
+      assignToName,
+    };
     try {
       const response = await ProjectService.createProject(project);
       setShow(true);
@@ -29,111 +33,126 @@ const AddProject = () => {
   };
 
   useEffect(() => {
-
-    const getUsers = async () => {
+    const getEmployee = async () => {
       try {
-        const response = await UserService.getUser();
-        setUsers(response.data);
+        const response = await EmployeeService.getAllEmployee();
+        setEmployee(response.data);
         console.log(response.data);
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
-    getUsers();
-
+    getEmployee();
   }, []);
 
+  const handleClose = () => {
+    setShow();
+    window.location.reload();
+  };
 
   return (
     <>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        className="text-center text-primary "
+      >
+        <Modal.Body>
+          <div className="mb-3">Berhasil menyimpan data!</div>
+          <div className="d-flex justify-content-center">
+            <Button className="btn btn-primary" onClick={handleClose}>
+              Ok
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Row>
         <Col>
-          <Form >
+          <Form>
             <Form.Group className="pb-2">
-              <Form.Label className="font-weight-bold">TITLE</Form.Label>
-              <input className='form-control' placeholder="Title"
+              <Form.Label className="font-weight-bold">TITLE <span className="text-danger">*</span></Form.Label>
+              <input
+                className="form-control"
+                placeholder="Title"
                 name="taskTitle"
                 value={taskTitle}
-                onChange={(e) => setTaskTitle(e.target.value)} />
+                onChange={(e) => setTaskTitle(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group className="pb-2">
-              <Form.Label className="font-weight-bold">DESCRIPTION</Form.Label>
-              <input className='form-control' placeholder="Deskripsi"
+              <Form.Label className="font-weight-bold">DESCRIPTION <span className="text-danger">*</span></Form.Label>
+              <input
+                className="form-control"
+                placeholder="Deskripsi"
                 name="taskDescription"
                 value={taskDescription}
-                onChange={(e) => setTaskDescription(e.target.value)} />
+                onChange={(e) => setTaskDescription(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group className="pb-2">
-              <Form.Label className="font-weight-bold">CLIENT</Form.Label>
-              <input className='form-control' placeholder="Client"
+              <Form.Label className="font-weight-bold">CLIENT <span className="text-danger">*</span></Form.Label>
+              <input
+                className="form-control"
+                placeholder="Client"
                 name="client"
                 value={client}
-                onChange={(e) => setClient(e.target.value)} />
+                onChange={(e) => setClient(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group className="pb-2">
-              <Form.Label className="font-weight-bold">ASSIGN TO</Form.Label>
-              <Form.Control as="select"
-                value={assignTo}
-                onChange={(e) => setAssignTo(e.target.value)}>
-                {users.map(user =>
-                  <option>{user.id}</option>)}
-
+              <Form.Label className="font-weight-bold">ASSIGN TO <span className="text-danger">*</span></Form.Label>
+              <Form.Control
+                as="select"
+                value={assignToName}
+                onChange={(e) => setAssignTo(e.target.value)}
+              >
+                {employee.map((user) => (
+                  <option>{user.employeeName}</option>
+                ))}
               </Form.Control>
             </Form.Group>
 
             <Form.Group className="pb-3">
-              <Form.Label className="font-weight-bold">Priority</Form.Label>
-              <Form.Control as="select"
+              <Form.Label className="font-weight-bold">Priority <span className="text-danger">*</span></Form.Label>
+              <Form.Control
+                as="select"
                 value={priority}
-                onChange={(e) => setPriority(e.target.value)}>
+                onChange={(e) => setPriority(e.target.value)}
+              >
                 <option>Choose</option>
-                <option value="Low">
-                  Low
-                </option>
-                <option value="Medium">
-                  Medium
-                </option>
-                <option value="HIgh">
-                  HIgh
-                </option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
               </Form.Control>
             </Form.Group>
 
             <Form.Group className="pb-3">
-              <Form.Label className="font-weight-bold">STATUS</Form.Label>
-              <Form.Control as="select"
+              <Form.Label className="font-weight-bold">STATUS <span className="text-danger">*</span></Form.Label>
+              <Form.Control
+                as="select"
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}>
+                onChange={(e) => setStatus(e.target.value)}
+              >
                 <option>Choose</option>
-                <option value="Not Yet">
-                  Not Yet
-                </option>
-                <option value="Ongoing">
-                  Ongoing
-                </option>
-                <option value="Done">
-                  Done
-                </option>
+                <option value="Not Yet">Not Yet</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Done">Done</option>
               </Form.Control>
             </Form.Group>
 
             <div>
-              <button className="btn btn-block btn-primary" type="submit" onClick={(e) => saveProject(e)}
+              <button
+                className="btn btn-block btn-primary"
+                type="submit"
+                onClick={(e) => saveProject(e)}
               >
                 Submit
               </button>
             </div>
-
-            <div>
-              <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide bg="primary">
-                <Toast.Body className="text-primary">Woohoo, Project berhasil disimpan!</Toast.Body>
-              </Toast>
-            </div>
-
           </Form>
 
           {/* <form onSubmit={handleSubmit(saveFreelancer)}>
@@ -174,8 +193,7 @@ const AddProject = () => {
         </Col>
       </Row>
     </>
-
-  )
-}
+  );
+};
 
 export default AddProject;

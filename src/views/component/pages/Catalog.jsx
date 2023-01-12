@@ -17,7 +17,7 @@ import { logo2x, trainingimage1, trainingimage3 } from "images";
 import { TiLocation } from "react-icons/ti";
 import { TrainingService } from "services";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const Catalog = () => {
   const [trainings, setTrainings] = useState([]);

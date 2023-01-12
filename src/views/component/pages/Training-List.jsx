@@ -1,12 +1,15 @@
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Dropdown, Row } from "react-bootstrap";
 import { CgPen, CgTrash } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { TrainingService } from "services";
 import { AddTraining } from "../components";
 import { AddModal } from "../components/modal";
 import { Header } from "../layout";
+import JsPDF from "jspdf";
+import { CSVLink } from "react-csv";
+import autoTable from "jspdf-autotable";
 
 const TrainingList = () => {
   const [trainings, setTrainings] = useState([]);
@@ -61,6 +64,38 @@ const TrainingList = () => {
     handleAddModal(<AddTraining />);
   };
 
+  const exportToPDF = () => {
+    const data = trainings.map((training) => [
+      training.trainingCode,
+      training.trainingName,
+      training.trainingMethod,
+    ]);
+
+    const marginLeft = 15;
+    const doc = new JsPDF();
+
+    doc.setFontSize(15);
+
+    const title = "Training List";
+    const headers = [["Kode Training", "Nama Training", "Metode Training"]];
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data,
+    };
+
+    doc.text(title, marginLeft, 35);
+    doc.autoTable(content);
+    doc.save("Training.pdf");
+  };
+
+  const headers = [
+    { label: "Kode Training", key: "trainingCode" },
+    { label: "Nama Training", key: "trainingName" },
+    { label: "Metode Training", key: "trainingMethod" },
+  ];
+
   return (
     <Header>
       <AddModal show={Boolean(modalContent)} {...modalContent} />
@@ -68,15 +103,38 @@ const TrainingList = () => {
       <h1 className="font-weight-bolder mb-5">Training List</h1>
       <div className="d-flex justify-content-start pl-3">
         <Row>
-          <Col className="col-auto">
-            <button onClick={addTraining} className="btn btn-primary btn-block">
+          <Col className="col-6">
+            <Button onClick={addTraining} className="btn btn-primary btn-block">
               Add
-            </button>
+            </Button>
           </Col>
-          <Col className="col-auto">
-            <Link to="/add-trainer" className="btn btn-primary btn-block">
-              Export
-            </Link>
+          <Col className="col-6">
+            <Dropdown as={ButtonGroup}>
+              <Button className="btn btn-primary btn-block">Export</Button>
+
+              <Dropdown.Toggle
+                split
+                className="btn btn-primary"
+                id="dropdown-split-basic"
+              />
+
+              <Dropdown.Menu className="primary">
+                <Dropdown.Item
+                  onClick={exportToPDF}
+                  className="font-weight-bold"
+                >
+                  PDF
+                </Dropdown.Item>
+                <CSVLink
+                  data={trainings}
+                  headers={headers}
+                  filename="Training.csv"
+                  className="dropdown-item font-weight-bold"
+                >
+                  CSV
+                </CSVLink>
+              </Dropdown.Menu>
+            </Dropdown>
           </Col>
         </Row>
       </div>
@@ -89,7 +147,7 @@ const TrainingList = () => {
           <div className="table-responsive">
             <table
               className="table table-bordered"
-              id="dataTable"
+              id="example"
               width="100%"
               cellSpacing="0"
             >

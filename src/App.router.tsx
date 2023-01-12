@@ -6,9 +6,10 @@ import {
   Route
 } from "react-router-dom";
 import { LoginPage } from 'views/component';
-import { ChangePassword, EditFreelancer, EditProject, EditTrainer, EditTraining } from 'views/component/components';
+import { ChangePassword, EditBilling, EditEmployee, EditFreelancer, EditProject, EditTrainer, EditTraining } from 'views/component/components';
 import { ProtectedRoute } from 'views/component/layout/ProtectedRoute';
 import { Billing, Freelancer, Home, Participant, PriceList, Registration, Setting, Trainer, TrainingList, TrainingNext, TrainingHistory, TransactionHistory, UserProfile, Project, Catalog, EventDetail, SuccessPage } from 'views/component/pages';
+import Employee from 'views/component/pages/Employee';
 
 const AppRouter = () => {
 
@@ -20,7 +21,7 @@ const AppRouter = () => {
 
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/event-detail/:id" element={<EventDetail />} />
-            <Route path="/success" element={<SuccessPage />} />
+            <Route path="/success/:id" element={<SuccessPage />} />
             <Route path="/registration/:id" element={<Registration />} />
             <Route path="/" element={
               <ProtectedRoute>
@@ -81,6 +82,11 @@ const AppRouter = () => {
                 <Project />
               </ProtectedRoute>} />
 
+            <Route path="/employee" element={
+              <ProtectedRoute>
+                <Employee />
+              </ProtectedRoute>} />
+
             {/* <Route path="/add-freelancer" element={<AddFreelancer />} /> */}
             <Route path="/edit-freelancer/:id" element={
               <ProtectedRoute>
@@ -93,9 +99,19 @@ const AppRouter = () => {
                 <EditTrainer />
               </ProtectedRoute>} />
 
+            <Route path="/edit-employee/:id" element={
+              <ProtectedRoute>
+                <EditEmployee />
+              </ProtectedRoute>} />
+
             <Route path="/edit-training/:id" element={
               <ProtectedRoute>
                 <EditTraining />
+              </ProtectedRoute>} />
+
+            <Route path="/edit-billing/:id" element={
+              <ProtectedRoute>
+                <EditBilling />
               </ProtectedRoute>} />
 
             <Route path="/edit-project/:id" element={

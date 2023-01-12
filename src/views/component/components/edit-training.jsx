@@ -7,7 +7,7 @@ import { FileUpload } from "primereact/fileupload";
 import DatePicker from "react-datepicker";
 import TrainingService from "services/TrainingService.service";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const EditTraining = () => {
   const [trainings, setTrainings] = useState({});
@@ -126,6 +126,11 @@ const EditTraining = () => {
 
   let handleColor = (time) => {
     return time.getHours() > 12 ? "text-success" : "text-danger";
+  };
+
+  const cancelEdit = () => {
+    navigate(`/training-list`);
+    window.location.reload();
   };
 
   return (
@@ -422,15 +427,26 @@ const EditTraining = () => {
                     </Form.Control>
                   </Form.Group> */}
 
-                  <Col className="col-12 col-lg-4 p-0">
-                    <button
-                      className="btn btn btn-primary btn-block"
-                      type="submit"
-                      onClick={(e) => updateTraining(e)}
-                    >
-                      Submit
-                    </button>
-                  </Col>
+                  <Row className="d-flex justify-content-between">
+                    <Col className="col-6 col-lg-4">
+                      <button
+                        className="btn btn btn-primary btn-block"
+                        type="submit"
+                        onClick={cancelEdit}
+                      >
+                        Cancel
+                      </button>
+                    </Col>
+                    <Col className="col-6 col-lg-4">
+                      <button
+                        className="btn btn btn-primary btn-block"
+                        type="submit"
+                        onClick={(e) => updateTraining(e)}
+                      >
+                        Submit
+                      </button>
+                    </Col>
+                  </Row>
                 </Form>
               </Col>
             </Row>

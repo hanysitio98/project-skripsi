@@ -8,8 +8,9 @@ import { TrainerService } from "services";
 import { AddTrainer } from "../components";
 import { AddModal } from "../components/modal";
 import { Header } from "../layout";
+import autoTable from "jspdf-autotable";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);

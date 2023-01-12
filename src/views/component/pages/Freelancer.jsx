@@ -4,7 +4,10 @@ import {
   ButtonGroup,
   Col,
   Dropdown,
-  Row
+  Row,
+  Modal,
+  Toast,
+  Alert,
 } from "react-bootstrap";
 import { CgPen, CgPushDown, CgTrash } from "react-icons/cg";
 import { Header } from "../layout";
@@ -15,12 +18,15 @@ import { Link } from "react-router-dom";
 import { FreelancerService } from "services";
 import { AddFreelancer } from "../components";
 import { AddModal } from "../components/modal";
+import autoTable from "jspdf-autotable";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const Freelancer = () => {
   const [freelancers, setFreelancers] = useState([]);
   const [modalContent, setModalContent] = useState();
+  const [show, setShow] = useState(false);
+  const [frlancerId, setFrlancerId] = useState("");
 
   const deleteFreelancer = (id) => {
     FreelancerService.deleteFreelancer(id)
@@ -46,6 +52,8 @@ const Freelancer = () => {
         const response = await FreelancerService.getAllFreelancer();
         setFreelancers(response.data);
         console.log(response.data);
+        const fr = response.data.map((a) => a.id);
+        setFrlancerId(fr);
       } catch (error) {
         console.log(error);
       }
@@ -102,10 +110,18 @@ const Freelancer = () => {
     { label: "Status", key: "isActive" },
   ];
 
+  const handleClose = () => {
+    setShow();
+    // window.location.reload();
+  };
+
+  const handleClick = () => {
+    setShow(true);
+  };
+
   return (
     <Header>
       <AddModal show={Boolean(modalContent)} {...modalContent} />
-
       <h1 className="font-weight-bolder mb-5">Freelancer</h1>
       <div className="d-flex pl-3">
         <Row>
@@ -225,7 +241,6 @@ const Freelancer = () => {
                         </td>
                       )
                     )}
-
                     <td>
                       <div className="d-inline-flex">
                         <Link
@@ -239,11 +254,31 @@ const Freelancer = () => {
                         </button> */}
                         <button
                           className="btn btn-outline-danger"
-                          onClick={() => deleteFreelancer(freelancer.id)}
+                          onClick={handleClick}
                           style={{ marginLeft: "10px" }}
                         >
                           <CgTrash />
                         </button>
+                        <Modal
+                          show={show}
+                          onHide={handleClose}
+                          centered={true}
+                          className="text-center text-primary "
+                        >
+                          <Modal.Body>
+                            <div className="mb-3 text-danger">
+                              Anda yakin ingin menghapus data ini?
+                            </div>
+                            <div className="d-flex justify-content-center">
+                              <Button
+                                className="btn btn-danger"
+                                onClick={() => deleteFreelancer(freelancer.id)}
+                              >
+                                Ok
+                              </Button>
+                            </div>
+                          </Modal.Body>
+                        </Modal>
                       </div>
                     </td>
                   </tr>

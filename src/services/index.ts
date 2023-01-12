@@ -4,6 +4,9 @@ import TrainerService from "./TrainerService.service";
 import TrainingService from "./TrainingService.service";
 import UserService from "./UserService.service";
 import RegistrationService from './RegistrationService.service';
+import EmployeeService from './EmployeeService.service';
+import BillingService from "./BillingService.service";
+import EmailService from "./EmailService.service";
 
 export {
   FreelancerService,
@@ -11,5 +14,8 @@ export {
   TrainerService,
   TrainingService,
   UserService,
-  RegistrationService
+  RegistrationService,
+  EmployeeService,
+  BillingService,
+  EmailService
 }

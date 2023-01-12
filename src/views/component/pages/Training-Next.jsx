@@ -32,7 +32,7 @@ const TrainingNext = () => {
           <div className="table-responsive">
             <table
               className="table table-bordered"
-              id="dataTable"
+              id="example"
               width="100%"
               cellSpacing="0"
             >

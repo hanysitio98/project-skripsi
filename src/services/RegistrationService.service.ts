@@ -18,6 +18,11 @@ const RegistrationService = {
 
   },
 
+  getRegisterByInv(invNo: string) {
+    return axiosInstance.get(`/registrations/` + invNo);
+
+  },
+
   updateRegister(id: string, registration: {}) {
     return axiosInstance.put(`/registrations/` + id, registration);
 

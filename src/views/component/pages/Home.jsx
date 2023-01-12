@@ -13,7 +13,7 @@ import {
 
 const Home = () => {
   const [linkCatalog, setLinkCatalog] = useState(
-    "https://zingy-frangipane-52426a.netlify.app/catalog"
+    "http://localhost:3001/catalog"
   );
   const [copied, setCopied] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -314,11 +314,11 @@ const Home = () => {
                         <td>{project.taskTitle}</td>
                         <td>{project.taskDescription}</td>
                         <td>{project.client}</td>
-                        <td>{project.assignTo.nama}</td>
+                        <td>{project.assignToName}</td>
                         {project.priority === "Low" ? (
                           <td>
                             <div className="badge badge-pill badge-success">
-                              {project.isActive}
+                              {project.priority}
                             </div>
                           </td>
                         ) : project.priority === "Medium" ? (

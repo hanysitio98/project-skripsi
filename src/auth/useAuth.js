@@ -3,7 +3,7 @@ import { Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { loginimage } from 'images';
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const AuthContext = createContext();
 
@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
   const signin = async (username, password) => {
     try {
       const response = await fetch(`${APP_BASE_URL}/auth/signin`, {
-        mode: "no-cors",
         method: "POST",
         body: JSON.stringify({
           username,

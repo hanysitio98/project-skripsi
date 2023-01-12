@@ -1,10 +1,10 @@
-import { FileUpload } from 'primereact/fileupload';
-import { useState } from 'react';
+import { FileUpload } from "primereact/fileupload";
+import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import TrainerService from "services/TrainerService.service";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const AddTrainer = () => {
   const [trainerName, setTrainerName] = useState("");
@@ -54,7 +54,8 @@ const AddTrainer = () => {
   };
 
   const handleClose = () => {
-    navigate(`/trainer`);
+    setShow();
+    window.location.reload();
   };
 
   return (
@@ -77,8 +78,10 @@ const AddTrainer = () => {
         <Col>
           <Row>
             <Col>
-              <div className="mb-3">
-                <Form.Label>CV</Form.Label>
+              <div>
+                <Form.Label>
+                  CV <span className="text-danger">*</span>
+                </Form.Label>
                 <FileUpload
                   name="file"
                   url={`${APP_BASE_URL}/api/uploadFile`}
@@ -89,8 +92,11 @@ const AddTrainer = () => {
               </div>
             </Col>
             <Col>
-              <div className="mb-3">
-                <Form.Label>Competencies Certificate</Form.Label>
+              <div>
+                <Form.Label>
+                  Competencies Certificate{" "}
+                  <span className="text-danger">*</span>
+                </Form.Label>
                 <FileUpload
                   name="file"
                   url={`${APP_BASE_URL}/api/uploadFile`}
@@ -101,11 +107,14 @@ const AddTrainer = () => {
               </div>
             </Col>
           </Row>
+          <small className="text-muted font-italic">
+            pilih gambar dan sertifikat kompetensi terlebih dahulu
+          </small>
 
-          <Form>
+          <Form className="mt-4">
             <Form.Group as={Row} controlId="formHorizontalCode">
               <Form.Label column sm={2}>
-                Trainer Code
+                Trainer Code <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -119,7 +128,7 @@ const AddTrainer = () => {
 
             <Form.Group as={Row} controlId="formHorizontalNama">
               <Form.Label column sm={2}>
-                Nama
+                Nama <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -133,7 +142,7 @@ const AddTrainer = () => {
 
             <Form.Group as={Row} controlId="formHorizontalSkill">
               <Form.Label column sm={2}>
-                Skill
+                Skill <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -151,7 +160,7 @@ const AddTrainer = () => {
               className="pb-3"
             >
               <Form.Label column sm={2}>
-                Status
+                Status <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control

@@ -8,17 +8,45 @@ import {
   Navbar,
   Button,
   Modal,
-  Spinner,
 } from "react-bootstrap";
-import { get, set, useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { RegistrationService, TrainingService } from "services";
-import { logo2x, gopay } from "images";
+import { logo2x } from "images";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import { render } from "@testing-library/react";
+import { NumericFormat } from "react-number-format";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
+
+export const STEPS_AMOUNT = 2;
+
+// const FinishSectionButton = ({ onClick, isDisabled, children }) => {
+//   return (
+//     // <button
+//     //   onClick={onClick}
+//     //   disabled={isDisabled}
+//     //   type="button"
+//     //   className="mt-6 bg-green-500 text-white rounded py-6 w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
+//     // >
+//     //   {children}
+//     // </button>
+
+//     <Row className="justify-content-center">
+//       <Col className="col-12 col-lg-5">
+//         <button
+//           onClick={onClick}
+//           className="btn btn-info btn-block"
+//           type="button"
+//         >
+//           {children}
+//         </button>
+//       </Col>
+//     </Row>
+//   );
+// };
 
 const SignupSchema = yup.object().shape({
   training: yup.string(),
@@ -34,30 +62,7 @@ const SignupSchema = yup.object().shape({
   paymentMethod: yup.string().required(),
 });
 
-// const signupData = {
-//   training: '',
-//   traineeName: '',
-//   amount : '',
-//   trainingMethod : '',
-//   email : '',
-//   phoneNumber: '',
-//   company: '',
-//   participantCount: '',
-//   tertiaryEducation: '',
-//   occupation: '',
-//   paymentMethod: '',
-//   paymentDate:
-// }
-
 const Registration = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, setValue, isValid },
-    watch,
-  } = useForm({
-    resolver: yupResolver(SignupSchema),
-  });
   const [trainings, setTrainings] = useState({});
   const [training, setTraining] = useState("");
   const [traineeName, setTraineeName] = useState();
@@ -71,14 +76,38 @@ const Registration = () => {
   const [occupation, setOccupation] = useState();
   const [paymentDate, setPaymentDate] = useState();
   const [paymentMethod, setPaymentMethod] = useState();
+  const [invNo, setInvNo] = useState();
   const [isLoading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [participant, setParticipant] = useState([]);
+  const [formStep, setFormStep] = React.useState(0);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, setValue, isValid, isDirty },
+    watch,
+    control,
+  } = useForm({
+    resolver: yupResolver(SignupSchema),
+  });
+
   const navigate = useNavigate();
 
   const { id } = useParams();
 
+  const handleStepCompletion = (e) => {
+    e.preventDefault();
+
+    setFormStep((cur) => cur + 1);
+  };
+
+  const handleGoBackToPreviousStep = () => {
+    setFormStep((cur) => cur - 1);
+  };
+
   const currentDate = new Date().toISOString();
+  const currentDateForInv = new Date().valueOf();
 
   const [show, setShow] = useState(false);
 
@@ -101,6 +130,7 @@ const Registration = () => {
         }
       }
     };
+    console.log(formStep);
 
     setPaymentDate(currentDate);
 
@@ -112,6 +142,7 @@ const Registration = () => {
       try {
         const response = await RegistrationService.getRegister();
         setParticipant(response.data);
+
         console.log(response.data);
       } catch (error) {
         console.log(error);
@@ -120,6 +151,25 @@ const Registration = () => {
 
     getAllParticipant();
   }, []);
+
+  const changeName = (e) => {
+    e.preventDefault();
+
+    const name = e.target.value;
+
+    setTraineeName(name);
+    /**
+     *
+     * @param {string} num
+     *
+     * @returns {string}
+     */
+    const getInvNo = (num) => {
+      return "INV-" + num.toString().padStart(6, "0");
+    };
+
+    setInvNo(getInvNo(currentDateForInv));
+  };
 
   const onSubmit = useCallback(async () => {
     if (training && amount && trainingMethod) {
@@ -135,13 +185,17 @@ const Registration = () => {
           participantCount,
           tertiaryEducation,
           occupation,
-          paymentMethod,
           paymentDate,
+          invNo,
+          paymentMethod,
         };
         setLoading(true);
         const register = await RegistrationService.createRegister(data);
         console.log(register.data);
-        setIsSuccess(true);
+        const id = register.data.id;
+        // setIsSuccess(true);
+        navigate(`/success/${id}`);
+        // setFormStep((cur) => cur + 1);
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -156,12 +210,13 @@ const Registration = () => {
     occupation,
     participantCount,
     paymentDate,
-    paymentMethod,
     phoneNumber,
     tertiaryEducation,
     traineeName,
     training,
     trainingMethod,
+    invNo,
+    paymentMethod,
   ]);
 
   return (
@@ -172,9 +227,6 @@ const Registration = () => {
         centered
         className="text-center text-info"
       >
-        {/* <Modal.Header closeButton> */}
-        {/* <Modal.Title>Modal heading</Modal.Title> */}
-        {/* </Modal.Header> */}
         <Modal.Body>
           <h5 className="font-wight-bold mb-2">Pendaftaran berhasil!</h5>
           <div>Informasi Pendaftaran</div>
@@ -186,12 +238,6 @@ const Registration = () => {
             </Button>
           </div>
         </Modal.Body>
-        {/* <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-         
-        </Modal.Footer> */}
       </Modal>
 
       <Navbar
@@ -217,6 +263,22 @@ Signed in as: <a href="#login">Mark Otto</a>
           <Row className="d-flex justify-content-center align-items-center h-100">
             <Col md="9">
               <Card className="rounded-3" border="info">
+                {/* {formStep < STEPS_AMOUNT && ( */}
+                {/* <div className="mt-2 ml-2 font-weight-bold">
+                    {formStep > 0 && (
+                      <a
+                        onClick={handleGoBackToPreviousStep}
+                        href=""
+                        className="mr-2"
+                      >
+                        <CgChevronLeft />
+                      </a>
+                    )}
+                    <span className="small text-primary font-weight-bold">
+                      Step {formStep + 1} of {STEPS_AMOUNT}
+                    </span>
+                  </div> */}
+                {/* )} */}
                 <Card.Header className="h5 text-center font-weight-bold text-info">
                   REGISTER
                 </Card.Header>
@@ -231,7 +293,7 @@ Signed in as: <a href="#login">Mark Otto</a>
                     <Col>
                       <form onSubmit={handleSubmit(onSubmit)}>
                         <Form.Group className="mt-3 mb-3">
-                          <Form.Label className="h5">
+                          <Form.Label className="h5 text-info">
                             Training Selected
                           </Form.Label>
                           <Form.Control
@@ -315,6 +377,15 @@ Signed in as: <a href="#login">Mark Otto</a>
                           />
 
                           <Form.Control
+                            {...register("invNo", { required: true })}
+                            plaintext
+                            className="font-weight-bold"
+                            defaultValue={trainings.invNo}
+                            value={trainings.invNo}
+                            type="hidden"
+                          />
+
+                          <Form.Control
                             plaintext
                             className="font-weight-bold"
                             {...register("trainingMethod")}
@@ -323,7 +394,7 @@ Signed in as: <a href="#login">Mark Otto</a>
                             type="hidden"
                           />
                         </Form.Group>
-
+                        {/* {formStep <= 0 && ( */}
                         <Form.Group className="mb-=3">
                           <Form.Label>Nama Lengkap</Form.Label>
                           <Form.Control
@@ -334,7 +405,8 @@ Signed in as: <a href="#login">Mark Otto</a>
                               },
                               maxLength: 20,
                             })}
-                            onChange={(e) => setTraineeName(e.target.value)}
+                            onChange={(e) => changeName(e)}
+                            placeholder="Nama Lengkap"
                           />
 
                           {errors.traineeName && (
@@ -352,6 +424,7 @@ Signed in as: <a href="#login">Mark Otto</a>
                             })}
                             type="email"
                             onChange={(e) => setEmail(e.target.value)}
+                            placeholder="email@email.com"
                           />
                           {errors.email && (
                             <small className="text-danger">
@@ -362,11 +435,23 @@ Signed in as: <a href="#login">Mark Otto</a>
 
                         <Form.Group className="mb-3">
                           <Form.Label>Nomor Handphone (Aktif)</Form.Label>
+                          {/* <NumericFormat
+                            {...register("phoneNumber", {
+                              required: true,
+                            })}
+                            className="form-control"
+                            placeholder="No Handphone"
+                            name="phoneNumber"
+                            value={phoneNumber}
+                            maxLength={13}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                          ></NumericFormat> */}
                           <Form.Control
                             {...register("phoneNumber", {
                               required: true,
                             })}
                             type="number"
+                            maxLength={13}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                           />
                           {errors.phoneNumber && (
@@ -376,6 +461,32 @@ Signed in as: <a href="#login">Mark Otto</a>
                           )}
                         </Form.Group>
 
+                        {/* <Form.Group className="mb-3">
+                          <Form.Label>Nomor Handphone (Aktif)</Form.Label>
+                          <Controller
+                            name="phoneNumber"
+                            control={control}
+                            rules={{
+                              required: true,
+                            }}
+                            render={({ field: { name, value, onChange } }) => (
+                              <NumericFormat
+                                className="form-control"
+                                placeholder="No Handphone"
+                                name="phoneNumber"
+                                value={value}
+                                maxLength={13}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                              />
+                            )}
+                          />
+                          {errors.phoneNumber && (
+                            <small className="text-danger">
+                              No handphone harus diisi
+                            </small>
+                          )}
+                        </Form.Group> */}
+
                         <Form.Group className="mb-3">
                           <Form.Label>Organisasi</Form.Label>
                           <Form.Control
@@ -384,10 +495,11 @@ Signed in as: <a href="#login">Mark Otto</a>
                               maxLength: 20,
                             })}
                             onChange={(e) => setCompany(e.target.value)}
+                            placeholder="Organisasi/Perusahaan"
                           />
                           {errors.company && (
                             <small className="text-danger">
-                              Organisasi harus diisi
+                              Organisasi/Perusahaan harus diisi
                             </small>
                           )}
                         </Form.Group>
@@ -400,8 +512,10 @@ Signed in as: <a href="#login">Mark Otto</a>
                                 value: true,
                                 message: "Harus diisi",
                               },
+
                               maxLength: 20,
                             })}
+                            type="number"
                             onChange={(e) =>
                               setParticipantCount(e.target.value)
                             }
@@ -464,7 +578,6 @@ Signed in as: <a href="#login">Mark Otto</a>
                             </small>
                           )}
                         </Form.Group>
-
                         <Form.Group className="mb-3">
                           <Form.Label>Metode Pembayaran</Form.Label>
                           <Form.Control

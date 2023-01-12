@@ -1,12 +1,13 @@
 import { FileUpload } from "primereact/fileupload";
 import { useEffect, useState } from "react";
-import { Col, Form, Row, Toast } from "react-bootstrap";
+import { Col, Form, Row, Toast, Modal, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { NumericFormat } from "react-number-format";
 import TrainingService from "services/TrainingService.service";
+import { useNavigate } from "react-router-dom";
 
-export const APP_BASE_URL = "https://zingy-frangipane-52426a.netlify.app";
+export const APP_BASE_URL = "http://localhost:8080";
 
 const AddTraining = () => {
   const [trainings, setTrainings] = useState();
@@ -32,6 +33,7 @@ const AddTraining = () => {
   const [show, setShow] = useState(false);
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getTrainings = async () => {
@@ -159,12 +161,34 @@ const AddTraining = () => {
     console.log(priceIncludeTax);
   };
 
+  const handleClose = () => {
+    setShow();
+    window.location.reload();
+  };
+
   return (
     <>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        className="text-center text-primary "
+      >
+        <Modal.Body>
+          <div className="mb-3">Berhasil menyimpan data!</div>
+          <div className="d-flex justify-content-center">
+            <Button className="btn btn-primary" onClick={handleClose}>
+              Ok
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Row>
         <Col>
           <Form.Group className="pb-3">
-            <Form.Label className="font-weight-bold">CATALOG IMAGE</Form.Label>
+            <Form.Label className="font-weight-bold">
+              CATALOG IMAGE <span className="text-danger">*</span>
+            </Form.Label>
+
             <FileUpload
               name="file"
               url={`${APP_BASE_URL}/api/uploadFile`}
@@ -173,12 +197,15 @@ const AddTraining = () => {
               onUpload={onUploadImage}
               chooseLabel="Pilih Gambar"
             />
+            <small className="text-muted font-italic">
+              pilih gambar katalog terlebih dahulu
+            </small>
           </Form.Group>
 
           <Form>
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                TRAINING CODE
+                TRAINING CODE <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -193,7 +220,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                TRAINING TITLE
+                TRAINING TITLE <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -208,7 +235,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                TRAINING CATEGORY
+                TRAINING CATEGORY <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 {/* <Form.Control className='form-control' placeholder="Training Category"
@@ -228,7 +255,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                TRAINING METHOD
+                TRAINING METHOD <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 {/* <Form.Control className='form-control' placeholder="Training Method"
@@ -260,7 +287,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                SYLLABUS
+                SYLLABUS <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -275,7 +302,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                EVENT DATE
+                EVENT DATE <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={6}>
                 <DatePicker
@@ -338,7 +365,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                REGISTRATION LIMIT DATE
+                REGISTRATION LIMIT DATE <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <DatePicker
@@ -354,7 +381,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                LOCATION EVENT
+                LOCATION EVENT <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -369,7 +396,7 @@ const AddTraining = () => {
 
             <Form.Group className="pb-3" as={Row}>
               <Form.Label column sm={2} className="font-weight-bold">
-                Training fee (before Tax)
+                Training fee (before Tax) <span className="text-danger">*</span>
               </Form.Label>
               <Col sm={10}>
                 {/* <Form.Control className='form-control' placeholder=""
@@ -449,7 +476,7 @@ const AddTraining = () => {
               </button>
             </div>
 
-            <div>
+            {/* <div>
               <Toast
                 onClose={() => setShow(false)}
                 show={show}
@@ -461,7 +488,7 @@ const AddTraining = () => {
                   Woohoo, Training berhasil disimpan!
                 </Toast.Body>
               </Toast>
-            </div>
+            </div> */}
           </Form>
         </Col>
       </Row>

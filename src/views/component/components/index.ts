@@ -7,6 +7,9 @@ import AddProject  from "./add-project";
 import AddTraining from "./add-training";
 import EditProject from "./edit-project";
 import EditTraining from "./edit-training";
+import EditEmployee from "./edit-employee";
+import AddBilling from "./add-billing";
+import EditBilling from "./EditBilling";
 
 export {
   AddFreelancer,
@@ -17,5 +20,8 @@ export {
   AddProject,
   AddTraining,
   EditProject,
-  EditTraining
+  EditTraining,
+  EditEmployee,
+  AddBilling,
+  EditBilling
 }
