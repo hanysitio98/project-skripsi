@@ -130,7 +130,6 @@ const Participant = () => {
             >
               <thead>
                 <tr>
-                  {/* <th>No Order</th> */}
                   <th>Nama Pelanggan</th>
                   <th>Email</th>
                   <th>No HP / WA</th>
@@ -138,12 +137,10 @@ const Participant = () => {
                   <th>Mode Pelatihan</th>
                   <th>Nama Pelatihan</th>
                   <th>Actions</th>
-                  {/* <th>Status</th> */}
                 </tr>
               </thead>
               <tfoot>
                 <tr>
-                  {/* <th>No Order</th> */}
                   <th>Nama Pelanggan</th>
                   <th>Email</th>
                   <th>No HP / WA</th>
@@ -151,7 +148,6 @@ const Participant = () => {
                   <th>Mode Pelatihan</th>
                   <th>Nama Pelatihan</th>
                   <th>Actions</th>
-                  {/* <th>Status</th> */}
                 </tr>
               </tfoot>
               <tbody>
