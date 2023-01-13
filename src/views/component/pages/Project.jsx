@@ -191,7 +191,6 @@ const Project = () => {
                     <td>{project.taskDescription}</td>
                     <td>{project.client}</td>
                     <td>{project.assignToName}</td>
-                    {/* <td>{project.priority}</td> */}
                     {project.priority === "Low" ? (
                       <td>
                         <div className="badge badge-pill badge-success">
@@ -213,7 +212,6 @@ const Project = () => {
                         </td>
                       )
                     )}
-                    {/* <td>{project.status}</td> */}
 
                     {project.status === "Done" ? (
                       <td>
@@ -244,9 +242,6 @@ const Project = () => {
                         >
                           <CgPen />
                         </Link>
-                        {/* <button className='btn btn-outline-info' onClick={() => editFreelancer(freelancer.id)}>
-                        <CgPen />
-                      </button> */}
                         <button
                           className="btn btn-outline-danger"
                           onClick={() => deleteProject(project.id)}
