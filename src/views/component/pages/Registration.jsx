@@ -87,10 +87,7 @@ const Registration = () => {
 
   const {
     register,
-    handleSubmit,
-    formState: { errors, setValue, isValid, isDirty },
-    watch,
-    control,
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(SignupSchema),
   });
@@ -99,19 +96,19 @@ const Registration = () => {
 
   const { id } = useParams();
 
-  const handleStepCompletion = (e) => {
-    e.preventDefault();
+  // const handleStepCompletion = (e) => {
+  //   e.preventDefault();
 
-    setFormStep((cur) => cur + 1);
-  };
+  //   setFormStep((cur) => cur + 1);
+  // };
 
-  const handleGoBackToPreviousStep = () => {
-    setFormStep((cur) => cur - 1);
-  };
+  // const handleGoBackToPreviousStep = () => {
+  //   setFormStep((cur) => cur - 1);
+  // };
 
-  const isValidForm = () => {
-    return traineeName.length > 0 && phoneNumber.length > 0;
-  };
+  // const isValidForm = () => {
+  //   return traineeName.length > 0 && phoneNumber.length > 0;
+  // };
 
   const currentDate = new Date().toISOString();
   const currentDateForInv = new Date().valueOf();
