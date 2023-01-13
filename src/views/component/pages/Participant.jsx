@@ -165,15 +165,6 @@ const Participant = () => {
                     <td>{peserta.training}</td>
                     <td>
                       <div className="d-inline-flex">
-                        {/* <Link
-                          className="btn btn-outline-info"
-                          to={`/edit-training/${peserta.id}`}
-                        >
-                          <CgPen />
-                        </Link> */}
-                        {/* <button className='btn btn-outline-info' onClick={() => editFreelancer(freelancer.id)}>
-                          <CgPen />
-                        </button> */}
                         <button
                           className="btn btn-outline-danger"
                           onClick={() => deleteParticipant(peserta.id)}
