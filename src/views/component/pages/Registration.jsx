@@ -322,22 +322,6 @@ Signed in as: <a href="#login">Mark Otto</a>
           <Row className="d-flex justify-content-center align-items-center h-100">
             <Col md="9">
               <Card className="rounded-3" border="info">
-                {/* {formStep < STEPS_AMOUNT && ( */}
-                {/* <div className="mt-2 ml-2 font-weight-bold">
-                    {formStep > 0 && (
-                      <a
-                        onClick={handleGoBackToPreviousStep}
-                        href=""
-                        className="mr-2"
-                      >
-                        <CgChevronLeft />
-                      </a>
-                    )}
-                    <span className="small text-primary font-weight-bold">
-                      Step {formStep + 1} of {STEPS_AMOUNT}
-                    </span>
-                  </div> */}
-                {/* )} */}
                 <Card.Header className="h5 text-center font-weight-bold text-info">
                   REGISTER
                 </Card.Header>
@@ -409,49 +393,6 @@ Signed in as: <a href="#login">Mark Otto</a>
                               }
                             )}
                           </Form.Text>
-
-                          {/* <Form.Control
-                            {...register("amount", { required: true })}
-                            plaintext
-                            className="font-weight-bold"
-                            value={trainings.startDate}
-                            type="hidden"
-                          />
-
-                          <Form.Control
-                            {...register("amount", { required: true })}
-                            plaintext
-                            className="font-weight-bold"
-                            value={trainings.endDate}
-                            type="hidden"
-                          /> */}
-
-                          <Form.Control
-                            {...register("amount", { required: true })}
-                            plaintext
-                            className="font-weight-bold"
-                            defaultValue={trainings.priceIncludeTax}
-                            value={trainings.priceIncludeTax}
-                            type="hidden"
-                          />
-
-                          <Form.Control
-                            {...register("invNo", { required: true })}
-                            plaintext
-                            className="font-weight-bold"
-                            defaultValue={trainings.invNo}
-                            value={trainings.invNo}
-                            type="hidden"
-                          />
-
-                          <Form.Control
-                            plaintext
-                            className="font-weight-bold"
-                            {...register("trainingMethod")}
-                            defaultValue={trainings.trainingMethod}
-                            value={trainings.trainingMethod}
-                            type="hidden"
-                          />
                         </Form.Group>
                         {/* {formStep <= 0 && ( */}
                         <Form.Group className="mb-=3">
@@ -658,7 +599,6 @@ Signed in as: <a href="#login">Mark Otto</a>
                           )}
                         </Form.Group> */}
 
-                        {/* <Form.Group className="mb-3"> */}
                         <Row className="pb-5">
                           <Col className="col-12 py-0 ">
                             <Form.Label>Metode Pembayaran</Form.Label>
@@ -725,8 +665,6 @@ Signed in as: <a href="#login">Mark Otto</a>
                             </div>
                           </Col>
                         </Row>
-
-                        {/* </Form.Group> */}
 
                         <Row className="justify-content-center">
                           <Col className="col-12 col-lg-5">
