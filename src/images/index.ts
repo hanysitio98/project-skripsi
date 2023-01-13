@@ -10,6 +10,8 @@ import loginimage from './undraw_remotely_2j6y.svg';
 import logo4Best from './logo4Best.png';
 import logo2x from './logo-2x.png';
 import gopay from './gopay.png';
+import ovo from './ovo.png';
+import shopeepay from './shopeepay.png';
 
 export {
   pic1,
@@ -23,5 +25,7 @@ export {
   loginimage,
   logo4Best,
   logo2x,
-  gopay
+  gopay,
+  ovo,
+  shopeepay
 }

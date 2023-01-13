@@ -10,14 +10,16 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
-import { logo2x, gopay } from "images";
+import { logo2x } from "images";
 import { EmailService, RegistrationService } from "services";
+import { useNavigate } from "react-router-dom";
 
 const SuccessPage = () => {
   const [registration, setRegistration] = useState({});
   const [recipient, setRecipient] = useState();
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -54,6 +56,10 @@ const SuccessPage = () => {
     console.log(response.data);
   };
 
+  const navigateToCatalog = () => {
+    navigate(`/catalog`);
+  };
+
   return (
     <>
       <Navbar
@@ -80,9 +86,13 @@ Signed in as: <a href="#login">Mark Otto</a>
             <Col>
               <Card className="rounded-3" border="info">
                 <Card.Body>
-                  <h5 className="font-weight-bold pb-3">
-                    Informasi Pesanan Pelatihan :{" "}
+                  <h5 className="font-weight-bold pb-3 text-info">
+                    {" "}
+                    Pendaftaran anda berhasil!{" "}
                   </h5>
+                  {/* <div>
+                    Informasi Pesanan Pelatihan :{" "}
+                  </div> */}
                   <Form>
                     <Form.Group as={Row}>
                       <Form.Label column sm={2}>
@@ -129,6 +139,14 @@ Signed in as: <a href="#login">Mark Otto</a>
                       * mohon simpan informasi pesanan anda, terima kasih!
                     </small>
                   </Form>
+
+                  <Row className="justify-content-center">
+                    <Col className="col-6 col-lg-3">
+                      <Button className="btn btn-info btn-block" type="button" onClick={navigateToCatalog}>
+                        Selesai
+                      </Button>
+                    </Col>
+                  </Row>
 
                   {/* <Button
                     className="btn btn-outline-info"
