@@ -12,7 +12,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { RegistrationService, TrainingService } from "services";
-import { logo2x, gopay } from "images";
+import { logo2x, gopay, shopeepay, ovo } from "images";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
@@ -77,6 +77,9 @@ const Registration = () => {
   const [paymentDate, setPaymentDate] = useState();
   const [paymentMethod, setPaymentMethod] = useState();
   const [invNo, setInvNo] = useState();
+  const [isPaid, setIsPaid] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [isLoading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [participant, setParticipant] = useState([]);
@@ -106,14 +109,30 @@ const Registration = () => {
     setFormStep((cur) => cur - 1);
   };
 
+  const isValidForm = () => {
+    return traineeName.length > 0 && phoneNumber.length > 0;
+  };
+
   const currentDate = new Date().toISOString();
   const currentDateForInv = new Date().valueOf();
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
-    navigate(`/success`);
+    setIsSuccess(false);
   };
+
+  const rupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    }).format(number);
+  };
+
+  const handleSubmitForm = () => {
+    setIsSuccess(true);
+  };
+
   const handleShow = () => setShow(true);
 
   useEffect(() => {
@@ -125,6 +144,19 @@ const Registration = () => {
           setTraining(response.data.trainingName);
           setTrainingMethod(response.data.trainingMethod);
           setAmount(response.data.priceIncludeTax);
+          setIsPaid(true);
+          setStartDate(response.data.startDate);
+          setEndDate(response.data.endDate);
+          /**
+           *
+           * @param {string} num
+           *
+           * @returns {string}
+           */
+          const getInvNo = (num) => {
+            return "INV-" + num.toString().padStart(6, "0");
+          };
+          setInvNo(getInvNo(currentDateForInv));
         } catch (error) {
           console.log(error);
         }
@@ -188,6 +220,9 @@ const Registration = () => {
           paymentDate,
           invNo,
           paymentMethod,
+          isPaid,
+          startDate,
+          endDate,
         };
         setLoading(true);
         const register = await RegistrationService.createRegister(data);
@@ -217,27 +252,51 @@ const Registration = () => {
     trainingMethod,
     invNo,
     paymentMethod,
+    isPaid,
+    startDate,
+    endDate,
   ]);
 
   return (
     <>
-      <Modal
-        show={isSuccess}
-        onHide={handleClose}
-        centered
-        className="text-center text-info"
-      >
+      <Modal show={isSuccess} centered onHide={handleClose}>
+        {/* <Modal.Header>
+          <div className="text-center">
+            <h5 className="font-weight-bold text-center text-info">
+              Informasi Pendaftaran
+            </h5>
+          </div>
+        </Modal.Header> */}
         <Modal.Body>
-          <h5 className="font-wight-bold mb-2">Pendaftaran berhasil!</h5>
-          <div>Informasi Pendaftaran</div>
-          <div className="mb-3">Training : {trainings.trainingName}</div>
-
-          <div className="d-flex justify-content-center">
-            <Button className="btn btn-info" onClick={handleClose}>
-              Selesai
+          <h5 className="font-weight-bold text-center text-info pb-4">
+            Informasi Pendaftaran
+          </h5>
+          {/* <div>Informasi Pendaftaran</div> */}
+          <div>Training selected - {trainings.trainingName}</div>
+          <div className=" mb-3">
+            {" "}
+            {new Date(startDate).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}{" "}
+            -{" "}
+            {new Date(endDate).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </div>
+          <div className="mb-2">Jumlah yang perlu anda bayar : </div>
+          <div className="mb-5 font-weight-bold">{rupiah(amount)}</div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="d-flex justify-content-center p-3">
+            <Button className="btn btn-info" onClick={onSubmit} type="submit">
+              Bayar dengan {paymentMethod}
             </Button>
           </div>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
 
       <Navbar
@@ -291,7 +350,7 @@ Signed in as: <a href="#login">Mark Otto</a>
 
                   <Row>
                     <Col>
-                      <form onSubmit={handleSubmit(onSubmit)}>
+                      <form>
                         <Form.Group className="mt-3 mb-3">
                           <Form.Label className="h5 text-info">
                             Training Selected
@@ -452,7 +511,7 @@ Signed in as: <a href="#login">Mark Otto</a>
                             })}
                             type="number"
                             maxLength={13}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            // onChange={(e) => setPhoneNumber(e.target.value)}
                           />
                           {errors.phoneNumber && (
                             <small className="text-danger">
@@ -494,7 +553,7 @@ Signed in as: <a href="#login">Mark Otto</a>
                               required: true,
                               maxLength: 20,
                             })}
-                            onChange={(e) => setCompany(e.target.value)}
+                            // onChange={(e) => setCompany(e.target.value)}
                             placeholder="Organisasi/Perusahaan"
                           />
                           {errors.company && (
@@ -578,7 +637,7 @@ Signed in as: <a href="#login">Mark Otto</a>
                             </small>
                           )}
                         </Form.Group>
-                        <Form.Group className="mb-3">
+                        {/* <Form.Group className="mb-3">
                           <Form.Label>Metode Pembayaran</Form.Label>
                           <Form.Control
                             {...register("paymentMethod", {
@@ -597,49 +656,87 @@ Signed in as: <a href="#login">Mark Otto</a>
                               Metode Pembayaran harus dipilih
                             </small>
                           )}
-                        </Form.Group>
+                        </Form.Group> */}
 
-                        <Form.Group className="mb-3">
-                          <Form.Label>Metode Pembayaran</Form.Label>
-                          <div className="form-check">
-                            <label>
-                              <img src={gopay} alt="gopay" />
-                              Gopay
-                            </label>
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              {...register("paymentMethod", {
-                                required: true,
-                              })}
-                              onChange={(e) => setPaymentMethod(e.target.value)}
-                            ></input>
-                          </div>
+                        {/* <Form.Group className="mb-3"> */}
+                        <Row className="pb-5">
+                          <Col className="col-12 py-0 ">
+                            <Form.Label>Metode Pembayaran</Form.Label>
+                          </Col>
 
-                          <div className="form-check">
-                            <label>
-                              <img src={gopay} alt="gopay" />
-                              OVO
-                            </label>
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              {...register("paymentMethod", {
-                                required: true,
-                              })}
-                              onChange={(e) => setPaymentMethod(e.target.value)}
-                            ></input>
-                          </div>
-                        </Form.Group>
+                          <Col className="col-12 py-0 px-3">
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                {...register("paymentMethod", {
+                                  required: true,
+                                })}
+                                onChange={(e) =>
+                                  setPaymentMethod(e.target.value)
+                                }
+                                value="Gopay"
+                              ></input>
+                              <label className="form-check-label ml-2">
+                                <img src={gopay} alt="gopay" width="70" />
+                              </label>
+                            </div>
+                          </Col>
+
+                          <Col className="col-12 py-0 px-3">
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                {...register("paymentMethod", {
+                                  required: true,
+                                })}
+                                onChange={(e) =>
+                                  setPaymentMethod(e.target.value)
+                                }
+                                value="OVO"
+                              ></input>
+                              <label className="form-check-label ml-2">
+                                <img src={ovo} alt="ovo" width="70" />
+                              </label>
+                            </div>
+                          </Col>
+
+                          <Col className="col-12 py-0 px-3">
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                {...register("paymentMethod", {
+                                  required: true,
+                                })}
+                                onChange={(e) =>
+                                  setPaymentMethod(e.target.value)
+                                }
+                                value="Shopeepay"
+                              ></input>
+                              <label className="form-check-label ml-2">
+                                <img
+                                  src={shopeepay}
+                                  alt="shopeepay"
+                                  width="70"
+                                />
+                              </label>
+                            </div>
+                          </Col>
+                        </Row>
+
+                        {/* </Form.Group> */}
 
                         <Row className="justify-content-center">
                           <Col className="col-12 col-lg-5">
-                            <Button
+                            <button
                               className="btn btn-info btn-block"
-                              type="submit"
+                              type="button"
+                              onClick={handleSubmitForm}
                             >
                               DAFTAR
-                            </Button>
+                            </button>
                           </Col>
                         </Row>
                       </form>
